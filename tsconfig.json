@@ -12,7 +12,7 @@
     "resolveJsonModule": true,
     "outDir": "dist"
   },
-  "include": ["server/src/**/*"],
+  "include": ["server/src/**/*", "server/server.config.json"],
 
 
 

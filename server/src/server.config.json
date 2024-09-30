@@ -1,0 +1,8 @@
+{
+  "config": {
+
+    "PORT": 3001,
+    "HOST": "localhost",
+    "APP_MSG": "Server running at"
+  }
+}
