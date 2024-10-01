@@ -4,7 +4,9 @@ import fs from "fs";
 import { delay } from "./utils/delay.js";
 
 import serverConfigJSON from "./server.config.json" assert { type: "json" };
+import { promisify } from "./utils/promisify.js";
 
+const readFile = promisify(fs.readFile);
 
 /**
  * The App class is the main class of the application. It creates an instance of an HTTP server and listens on a specified port.
@@ -23,22 +25,24 @@ export class App {
   static config: typeof serverConfigJSON.config = serverConfigJSON.config;
   static #instance: http.Server = null;
 
-
-
-  static init(callback?: (req: http.IncomingMessage, res: http.ServerResponse) => void): http.Server {
+  /**
+   * Initializes the server instance if it has not been initialized already.
+   *
+   * @param {function} [callback=(req: http.IncomingMessage, res: http.ServerResponse) => void] - Optional callback function to be executed for each request.
+   * @return {http.Server} The server instance.
+   */
+  static init(
+    callback?: (req: http.IncomingMessage, res: http.ServerResponse) => void
+  ): http.Server {
     if (App.#instance !== null) {
       console.log("Server already initialized");
       return App.#instance;
-      
     } else {
-
-
       App.#instance = http.createServer(async (req, res) => {
         res.setHeader("Content-Type", "text/html");
 
-        if(callback) callback(req, res);
+        if (callback) callback(req, res);
         else await App.route(req, res);
-
       });
 
       return App.#instance;
@@ -49,17 +53,22 @@ export class App {
     switch (req.url) {
       case "/":
       case "/home": {
-        fs.readFile(__DIR__ + "/pages/index.html", async (err, data) => {
+
+     
+        await readFile(__DIR__ + "/pages/index.html", async (err, data) => {
           if (err) {
             res.writeHead(500);
-            res.end();
+            res.end('Error loading index.html');
           } else {
             res.writeHead(200);
             res.end(data);
           }
         });
+     
+
         break;
       }
+
       case "/about": {
         await delay(1000);
         res.end("About");
