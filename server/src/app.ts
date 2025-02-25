@@ -1,25 +1,21 @@
 import http from "http";
 import { __DIR__ } from "./constants/constants.js";
 import fs from "fs";
-import { delay } from "./utils/delay.js";
 
-import serverConfigJSON from "./server.config.json" assert { type: "json" };
+import  serverConfigJSON from "./server.config.json" with { type: "json" };  
 import { promisify } from "./utils/promisify.js";
 
 const readFile = promisify(fs.readFile);
 
+
+
+
 /**
- * The App class is the main class of the application. It creates an instance of an HTTP server and listens on a specified port.
- * The server is configured to handle GET requests for the root ('/') and '/about' paths.
- * The server is also configured to handle POST requests for the '/about' path.
- * The server uses the 'fs' module to read the contents of the 'index.html' file and the 'about.html' file and return them as the response to the GET requests.
- * The server also uses the 'delay' function to simulate a delay in responding to the GET and POST requests.
- * The server is configured to listen on port 3003 and to log a message to the console when it is listening.
- * @class App
- * @author Farid
- * @since 2023-02-24
- * @version 1.0.0
+ * This function initializes the application, setting up necessary configurations and starting the server.
+ * It utilizes constants from the configuration file and a promisified version of the file system's readFile function.
+ * The App class, located below, manages the server initialization and routing logic.
  */
+
 
 export class App {
   static config: typeof serverConfigJSON.config = serverConfigJSON.config;
@@ -37,7 +33,8 @@ export class App {
     if (App.#instance !== null) {
       console.log("Server already initialized");
       return App.#instance;
-    } else {
+    } 
+    else {
       App.#instance = http.createServer(async (req, res) => {
         res.setHeader("Content-Type", "text/html");
 
@@ -70,8 +67,15 @@ export class App {
       }
 
       case "/about": {
-        await delay(1000);
-        res.end("About");
+        await readFile(__DIR__ + "/pages/about.html", async (err, data) => {
+          if (err) {
+            res.writeHead(500);
+            res.end('Error loading about.html');
+          } else {
+            res.writeHead(200);
+            res.end(data);
+          }
+        });
         break;
       }
 
