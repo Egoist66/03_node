@@ -18,16 +18,12 @@ const readFile = promisify(fs.readFile);
 
 
 export class App {
+
   static config: typeof serverConfigJSON.config = serverConfigJSON.config;
   static #instance: http.Server = null;
 
-  /**
-   * Initializes the server instance if it has not been initialized already.
-   *
-   * @param {function} [callback=(req: http.IncomingMessage, res: http.ServerResponse) => void] - Optional callback function to be executed for each request.
-   * @return {http.Server} The server instance.
-   */
-  static init(
+
+  static create(
     callback?: (req: http.IncomingMessage, res: http.ServerResponse) => void
   ): http.Server {
     if (App.#instance !== null) {
@@ -81,7 +77,7 @@ export class App {
 
       default: {
         res.writeHead(404);
-        res.end();
+        res.end('Page not found');
       }
     }
   }

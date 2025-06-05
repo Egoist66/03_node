@@ -12,11 +12,11 @@
   "author": "Farid",
   "license": "MIT",
   "dependencies": {
-    "nodemon": "3.1.9"
+    "nodemon": "3.1.10"
   },
   "devDependencies": {
-    "@types/node": "22.13.5",
+    "@types/node": "22.15.29",
     "ts-node": "10.9.2",
-    "typescript": "5.7.3"
+    "typescript": "5.8.3"
   }
 }
