@@ -10,5 +10,6 @@ server.listen(App.config.PORT, async () => {
 
 
 
+
 //fs.createReadStream(__DIR__ + '/server/src/server.config.json')
 // .pipe(fs.createWriteStream('./dist/server2.config.json'));
